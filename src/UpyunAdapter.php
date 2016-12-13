@@ -2,8 +2,8 @@
 
 namespace Fuguevit\Storage;
 
-use League\Flysystem\Config;
 use League\Flysystem\Adapter\AbstractAdapter;
+use League\Flysystem\Config;
 
 class UpyunAdapter extends AbstractAdapter
 {
@@ -12,7 +12,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function write($path, $contents, Config $config)
     {
-
     }
 
     /**
@@ -20,7 +19,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function writeStream($path, $resource, Config $config)
     {
-
     }
 
     /**
@@ -28,7 +26,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function update($path, $contents, Config $config)
     {
-
     }
 
     /**
@@ -36,7 +33,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function updateStream($path, $resource, Config $config)
     {
-
     }
 
     /**
@@ -44,7 +40,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
-
     }
 
     /**
@@ -52,7 +47,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function copy($path, $newpath)
     {
-
     }
 
     /**
@@ -60,7 +54,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function delete($path)
     {
-
     }
 
     /**
@@ -68,7 +61,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
-
     }
 
     /**
@@ -76,7 +68,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
-
     }
 
     /**
@@ -84,7 +75,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function setVisibility($path, $visibility)
     {
-
     }
 
     /**
@@ -92,7 +82,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function has($path)
     {
-
     }
 
     /**
@@ -100,7 +89,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function read($path)
     {
-
     }
 
     /**
@@ -108,7 +96,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function readStream($path)
     {
-
     }
 
     /**
@@ -116,7 +103,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-
     }
 
     /**
@@ -124,7 +110,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getMetadata($path)
     {
-
     }
 
     /**
@@ -132,7 +117,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getSize($path)
     {
-
     }
 
     /**
@@ -140,7 +124,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getMimetype($path)
     {
-
     }
 
     /**
@@ -148,7 +131,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getTimestamp($path)
     {
-
     }
 
     /**
@@ -156,6 +138,5 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getVisibility($path)
     {
-
     }
 }
