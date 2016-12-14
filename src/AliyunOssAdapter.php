@@ -2,12 +2,12 @@
 
 namespace Fuguevit\Storage;
 
-use OSS\OssClient;
-use OSS\Core\OssException;
-use League\Flysystem\Util;
-use League\Flysystem\Config;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Adapter\AbstractAdapter;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config;
+use League\Flysystem\Util;
+use OSS\Core\OssException;
+use OSS\OssClient;
 
 class AliyunOssAdapter extends AbstractAdapter
 {
@@ -15,11 +15,11 @@ class AliyunOssAdapter extends AbstractAdapter
      * @var array
      */
     protected static $resultMap = [
-        'Body' => 'raw_contents',
+        'Body'           => 'raw_contents',
         'Content-Length' => 'size',
-        'ContentType' => 'mimetype',
-        'Size' => 'size',
-        'StorageClass' => 'storage_class'
+        'ContentType'    => 'mimetype',
+        'Size'           => 'size',
+        'StorageClass'   => 'storage_class',
     ];
 
     /**
@@ -41,15 +41,15 @@ class AliyunOssAdapter extends AbstractAdapter
      * @var array
      */
     protected static $metaMap = [
-        'CacheControl' => 'Cache-Control',
-        'Expires' => 'Expires',
+        'CacheControl'         => 'Cache-Control',
+        'Expires'              => 'Expires',
         'ServerSideEncryption' => 'x-oss-server-side-encryption',
-        'Metadata' => 'x-oss-metadata-directive',
-        'ACL' => 'x-oss-object-acl',
-        'ContentType' => 'Content-Type',
-        'ContentDisposition' => 'Content-Disposition',
-        'ContentLanguage' => 'response-content-language',
-        'ContentEncoding' => 'Content-Encoding',
+        'Metadata'             => 'x-oss-metadata-directive',
+        'ACL'                  => 'x-oss-object-acl',
+        'ContentType'          => 'Content-Type',
+        'ContentDisposition'   => 'Content-Disposition',
+        'ContentLanguage'      => 'response-content-language',
+        'ContentEncoding'      => 'Content-Encoding',
     ];
 
     protected $client;
@@ -57,7 +57,7 @@ class AliyunOssAdapter extends AbstractAdapter
     protected $bucket;
 
     protected $options = [
-        'Multipart' => 128
+        'Multipart' => 128,
     ];
 
     /**
@@ -65,7 +65,7 @@ class AliyunOssAdapter extends AbstractAdapter
      *
      * @param OssClient $client
      * @param $bucket
-     * @param null $prefix
+     * @param null  $prefix
      * @param array $options
      */
     public function __construct(OssClient $client, $bucket, $prefix = null, $options = [])
@@ -94,23 +94,24 @@ class AliyunOssAdapter extends AbstractAdapter
         if (gettype($contents) == 'resource') {
             $contents = stream_get_contents($contents);
         }
-        
+
         $object = $this->applyPathPrefix($path);
         $options = $this->getOptions($this->options, $config);
-        
-        if (! isset($options[OssClient::OSS_LENGTH])) {
+
+        if (!isset($options[OssClient::OSS_LENGTH])) {
             $options[OssClient::OSS_LENGTH] = Util::contentSize($contents);
         }
-        
-        if (! isset($options[OssClient::OSS_CONTENT_TYPE])) {
+
+        if (!isset($options[OssClient::OSS_CONTENT_TYPE])) {
             $options[OssClient::OSS_CONTENT_TYPE] = Util::guessMimeType($path, $contents);
         }
-        
+
         try {
             $this->client->putObject($this->getBucket(), $object, $contents, $options);
         } catch (OssException $e) {
-            return false;    
+            return false;
         }
+
         return $this->normalizeResponse($options, $path);
     }
 
@@ -120,26 +121,27 @@ class AliyunOssAdapter extends AbstractAdapter
     public function writeStream($path, $resource, Config $config)
     {
         $contents = stream_get_contents($resource);
-        
+
         return $this->write($path, $contents, $config);
     }
 
     /**
      * Write file from its original path to destination.
-     * 
+     *
      * @param $path
      * @param $filePath
      * @param Config $config
+     *
      * @return array|bool
      */
     public function writeFile($path, $filePath, Config $config)
     {
         $object = $this->applyPathPrefix($path);
         $options = $this->getOptions($this->options, $config);
-        
+
         $options[OssClient::OSS_CHECK_MD5] = true;
-        
-        if (! isset($options[OssClient::OSS_CONTENT_TYPE])) {
+
+        if (!isset($options[OssClient::OSS_CONTENT_TYPE])) {
             $options[OssClient::OSS_CONTENT_TYPE] = Util::guessMimeType($path, '');
         }
         try {
@@ -147,7 +149,7 @@ class AliyunOssAdapter extends AbstractAdapter
         } catch (OssException $e) {
             return false;
         }
-        
+
         return $this->normalizeResponse($options, $path);
     }
 
@@ -319,7 +321,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
-        
     }
 
 
@@ -329,7 +330,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function setVisibility($path, $visibility)
     {
-        
     }
 
     /**
@@ -337,7 +337,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function has($path)
     {
-        
     }
 
     /**
@@ -345,7 +344,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function read($path)
     {
-        
     }
 
     /**
@@ -353,7 +351,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function readStream($path)
     {
-        
     }
 
     /**
@@ -361,7 +358,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        
     }
 
     /**
@@ -369,7 +365,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getMetadata($path)
     {
-        
     }
 
     /**
@@ -377,7 +372,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getSize($path)
     {
-        
     }
 
     /**
@@ -385,7 +379,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getMimetype($path)
     {
-        
     }
 
     /**
@@ -393,7 +386,6 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getTimestamp($path)
     {
-        
     }
 
     /**
@@ -401,14 +393,14 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getVisibility($path)
     {
-        
     }
 
     /**
-     * Get options. 
-     * 
-     * @param array $options
+     * Get options.
+     *
+     * @param array       $options
      * @param Config|null $config
+     *
      * @return array
      */
     protected function getOptions($options = [], Config $config = null)
@@ -417,35 +409,36 @@ class AliyunOssAdapter extends AbstractAdapter
         if ($config) {
             $options = array_merge($options, $this->getOptionsFromConfig($config));
         }
-        
-        return array(OssClient::OSS_HEADERS => $options);
+
+        return [OssClient::OSS_HEADERS => $options];
     }
 
     /**
      * Get options from configuration file.
-     * 
+     *
      * @param Config $config
+     *
      * @return array
      */
     protected function getOptionsFromConfig(Config $config)
     {
         $options = [];
-        
+
         foreach (static::$metaOptions as $option) {
             if (!$config->has($option)) {
                 continue;
             }
             $options[static::$metaMap[$option]] = $config->get($option);
         }
-        
+
         if ($visibility = $config->get('visibility')) {
             $options['x-oss-object-acl'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? OssClient::OSS_ACL_TYPE_PUBLIC_READ : OssClient::OSS_ACL_TYPE_PRIVATE;
         }
-        
+
         if ($mimetype = $config->get('mimetype')) {
             $options['Content-Type'] = $mimetype;
         }
-        
+
         return $options;
     }
 
@@ -464,28 +457,30 @@ class AliyunOssAdapter extends AbstractAdapter
 
     /**
      * Normalize Response.
-     * 
+     *
      * @param array $object
-     * @param null $path
+     * @param null  $path
+     *
      * @return array
      */
     protected function normalizeResponse(array $object, $path = null)
     {
-        $result = ['path' => $path ? : $this->removePathPrefix(isset($object['Key']) ? $object['Key'] : $object['Prefix'])];
+        $result = ['path' => $path ?: $this->removePathPrefix(isset($object['Key']) ? $object['Key'] : $object['Prefix'])];
         $result['dirname'] = Util::dirname($result['path']);
-        
+
         if (isset($object['LastModified'])) {
             $result['timestamp'] = strtotime($object['LastModified']);
         }
-        
+
         if (substr($result['pah'], -1) === '/') {
             $result['type'] = 'dir';
             $result['path'] = rtrim($result['path'], '/');
+
             return $result;
         }
-        
+
         $result = array_merge($result, Util::map($object, static::$resultMap), ['type' => 'file']);
+
         return $result;
     }
-    
 }

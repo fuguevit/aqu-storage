@@ -19,6 +19,7 @@ class PutFile extends AbstractPlugin
      * @param $path
      * @param $filePath
      * @param array $options
+     *
      * @return bool
      */
     public function handle($path, $filePath, array $options = [])
@@ -27,7 +28,7 @@ class PutFile extends AbstractPlugin
         if (method_exists($this->filesystem, 'getConfig')) {
             $config->setFallback($this->filesystem->getConfig());
         }
-        
-        return (bool)$this->filesystem->getAdapter()->writeFile($path, $filePath, $config);
+
+        return (bool) $this->filesystem->getAdapter()->writeFile($path, $filePath, $config);
     }
 }
