@@ -321,15 +321,31 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
+        $object = $this->applyPathPrefix($dirname);
+        $options = $this->getOptionsFromConfig($config);
+        
+        try {
+            $this->client->createObjectDir($this->bucket, $object, $options);
+        } catch (OssException $e) {
+            return false;   
+        }
+        
+        $dir = ['path' => $dirname, 'type' => 'dir'];
+        
+        return $dir;
     }
-
-
 
     /**
      * {@inheritdoc}
      */
     public function setVisibility($path, $visibility)
     {
+        $object = $this->applyPathPrefix($path);
+        $acl = ( $visibility === AdapterInterface::VISIBILITY_PUBLIC) ? OssClient::OSS_ACL_TYPE_PUBLIC_READ : OssClient::OSS_ACL_TYPE_PRIVATE;
+        
+        $this->client->putObject($this->bucket, $object, $acl);
+        
+        return compact('visibility');
     }
 
     /**
@@ -337,6 +353,9 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function has($path)
     {
+        $object = $this->applyPathPrefix($path);
+        
+        return $this->client->doesObjectExist($this->bucket, $object);
     }
 
     /**
@@ -344,6 +363,11 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function read($path)
     {
+        $result = $this->readObject($path);
+        $result['contents'] = (string) $result['raw_contents'];
+        unset($result['raw_contents']);
+        
+        return $result;
     }
 
     /**
@@ -351,6 +375,29 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function readStream($path)
     {
+        $result = $this->readObject($path);
+        $result['stream'] = fopen('php://memory', 'r+');
+        fwrite($result['stream'], $result['raw_contents']);
+        rewind($result['stream']);
+        unset($result['raw_contents']);
+        
+        return $result;
+    }
+
+    /**
+     * Read object from oss client.
+     * 
+     * @param $path
+     * @return array
+     */
+    protected function readObject($path)
+    {
+        $object = $this->applyPathPrefix($path);
+        
+        $result['Body'] = $this->client->getObject($this->bucket, $object);
+        $result = array_merge($result, ['type' => 'file']);
+        
+        return $this->normalizeResponse($result, $path);
     }
 
     /**
@@ -358,6 +405,15 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
+        $dirObjects = $this->listDirObjects($directory, true);
+        $contents = $dirObjects['objects'];
+        
+        $result = array_map([$this, 'normalizeResponse'], $contents);
+        $result = array_filter($result, function($value) {
+           return $value['path'] !== false; 
+        });
+        
+        return Util::emulateDirectories($result);
     }
 
     /**
@@ -365,6 +421,15 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getMetadata($path)
     {
+        $object = $this->applyPathPrefix($path);
+        
+        try {
+            $objectMeta = $this->client->getObjectMeta($this->bucket, $object);
+        } catch (OssException $e) {
+            return false;
+        }
+        
+        return $objectMeta;
     }
 
     /**
@@ -372,6 +437,10 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getSize($path)
     {
+        $objectMeta = $this->getMetadata($path);
+        $objectMeta['size'] = $objectMeta['content-length'];
+        
+        return $objectMeta;
     }
 
     /**
@@ -379,6 +448,10 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getMimetype($path)
     {
+        $objectMeta = $this->getMetadata($path);
+        $objectMeta['mimetype'] = $objectMeta['content-type'];
+        
+        return $objectMeta;
     }
 
     /**
@@ -386,6 +459,10 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getTimestamp($path)
     {
+        $objectMeta = $this->getMetadata($path);
+        $objectMeta['timestamp'] = $objectMeta['data'];
+        
+        return $objectMeta;
     }
 
     /**
@@ -393,6 +470,22 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function getVisibility($path)
     {
+        // init result array
+        $result = [];
+        $object = $this->applyPathPrefix($path);
+        try {
+            $acl = $this->client->getObjectAcl($this->bucket, $object);
+        } catch (OssException $e) {
+            return false;
+        }
+        
+        if ($acl == OssClient::OSS_ACL_TYPE_PUBLIC_READ) {
+            $result['visibility'] = AdapterInterface::VISIBILITY_PUBLIC;
+        } else {
+            $result['visibility'] = AdapterInterface::VISIBILITY_PRIVATE;
+        }
+        
+        return $result;
     }
 
     /**
