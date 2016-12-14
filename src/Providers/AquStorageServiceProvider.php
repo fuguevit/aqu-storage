@@ -9,7 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
 use OSS\OssClient;
 
-class AliyunOssServiceProvider extends ServiceProvider
+class AquStorageServiceProvider extends ServiceProvider
 {
     /**
      * {@inheritdoc}
