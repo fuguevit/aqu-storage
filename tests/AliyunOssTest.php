@@ -13,13 +13,12 @@ class AliyunOssTest extends TestCase
     }
 
     /**
-     * Test method write
-     * 
+     * Test method write.
+     *
      * @return mixed
      */
     public function test_it_can_push_file_to_oss()
     {
         $this->assertTrue(true);
     }
-
 }
