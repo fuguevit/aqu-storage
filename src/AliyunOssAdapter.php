@@ -156,7 +156,11 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function update($path, $contents, Config $config)
     {
+        if (! $config->has('visibility') && ! $config->has('ACL')) {
+            $config->set(static::$metaMap['ACL'], $this->getObjectACL($path));
+        }
         
+        return $this->write($path, $contents, $config);
     }
 
     /**
@@ -164,7 +168,9 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function updateStream($path, $resource, Config $config)
     {
+        $contents = stream_get_contents($resource);
         
+        return $this->write($path, $contents, $config);
     }
 
     /**
@@ -172,7 +178,11 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
+        if (! $this->copy($path, $newpath)) {
+            return false;
+        }
         
+        return $this->delete($path);
     }
 
     /**
@@ -180,7 +190,16 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function copy($path, $newpath)
     {
+        $object = $this->applyPathPrefix($path);
+        $newObject = $this->applyPathPrefix($newpath);
         
+        try {
+            $this->client->copyObject($this->bucket, $object, $this->bucket, $newObject);
+        } catch (OssException $e) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -188,7 +207,15 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function delete($path)
     {
+        $object = $this->applyPathPrefix($path);
         
+        try {
+            $this->client->deleteObject($this->bucket, $object);
+        } catch (OssException $e) {
+            return false;    
+        }
+        
+        return ! $this->has($path);
     }
 
     /**
@@ -330,6 +357,19 @@ class AliyunOssAdapter extends AbstractAdapter
         }
         
         return $options;
+    }
+
+    /**
+     * The ACL visibility.
+     * 
+     * @param $path
+     * @return string
+     */
+    protected function getObjectACL($path)
+    {
+        $metadata = $this->getVisibility($path);
+        
+        return $metadata['visibility'] === AdapterInterface::VISIBILITY_PUBLIC ? OssClient::OSS_ACL_TYPE_PUBLIC_READ : OssClient::OSS_ACL_TYPE_PRIVATE;
     }
 
     /**
