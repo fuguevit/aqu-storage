@@ -19,7 +19,7 @@ class TestCase extends OrchestraTestCase
      */
     public function getEnvironmentSetUp($app)
     {
-        parent::getEnvironmentSetUp($app); 
+        parent::getEnvironmentSetUp($app);
     }
 
     /**
