@@ -223,7 +223,95 @@ class AliyunOssAdapter extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
+        $dirname = rtrim($this->applyPathPrefix($dirname), '/').'/';
+        $dirObjects = $this->listDirObjects($dirname, true);
+        // when objects > 0, delete them all 
+        if (count($dirObjects['objects'])) {
+            foreach ($dirObjects['objects'] as $object) {
+                $objects[] = $object['Key'];
+            }
+            
+            try {
+                $this->client->deleteObject($this->bucket, $objects);
+            } catch (OssException $e) {
+                return false;
+            }
+        }
+        
+        // delete directory
+        try {
+            $this->client->deleteObject($this->bucket, $dirname);
+        } catch (OssException $e) {
+            return false;
+        }
+        
+        return true;
+    }
 
+    /**
+     * List objects under specified directory, can be recursive.
+     *
+     * @param string $dirname
+     * @param bool $recursive
+     * 
+     * @return mixed
+     */
+    public function listDirObjects($dirname = '', $recursive = false)
+    {
+        $result = [];
+        
+        $delimiter = '/';
+        $nextMarker = '';
+        $maxkeys = 1000;
+        
+        $options = array(
+            'delimiter' => $delimiter,
+            'prefix'    => $dirname,
+            'max-keys'  => $maxkeys,
+            'marker'    => $nextMarker
+        );
+        
+        try {
+            $listObjectInfo = $this->client->listObjects($this->bucket, $options);
+        } catch (OssException $e) {
+            return false;
+        }
+        
+        $objectList = $listObjectInfo->getObjectList();
+        $prefixList = $listObjectInfo->getPrefixList();
+        
+        if (! empty($objectList)) {
+            foreach ($objectList as $objectInfo) {
+                $object['Prefix']       = $dirname;
+                $object['Key']          = $objectInfo->getKey();
+                $object['LastModified'] = $objectInfo->getLastModified();
+                $object['eTag']         = $objectInfo->getETag();
+                $object['Type']         = $objectInfo->getType();
+                $object['Size']         = $objectInfo->getSize();
+                $object['StorageClass'] = $objectInfo->getStorageClass();
+                
+                $result['objects'][] = $object;
+            }
+        } else {
+            $result['objects'] = [];
+        }
+        
+        if (! empty($prefixList)) {
+            foreach ($prefixList as $prefixInfo) {
+                $result['prefix'][] = $prefixInfo->getPrefix();
+            }
+        } else {
+            $result['prefix'] = [];
+        }
+        
+        if ($recursive) {
+            foreach ($result['prefix'] as $prefix) {
+                $next = $this->listDirObjects($prefix, $recursive);
+                $result['objects'] = array_merge($result['objects'], $next['objects']);
+            }
+        }
+        
+        return $result;
     }
 
     /**
@@ -233,6 +321,8 @@ class AliyunOssAdapter extends AbstractAdapter
     {
         
     }
+
+
 
     /**
      * {@inheritdoc}
