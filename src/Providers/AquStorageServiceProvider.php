@@ -42,7 +42,7 @@ class AquStorageServiceProvider extends ServiceProvider
      */
     protected function initQiniuAdapter()
     {
-        Storage::extend('qiniu', function($app, $config) {
+        Storage::extend('qiniu', function ($app, $config) {
             $accessKey = $config['access_key'];
             $secretKey = $config['secret_key'];
             $bucket = $config['bucket'];
@@ -51,7 +51,7 @@ class AquStorageServiceProvider extends ServiceProvider
             $adapter = new QiniuAdapter($auth, $bucket);
             $filesystem = new Filesystem($adapter);
             $filesystem->addPlugin(new PutFile());
-            
+
             return $filesystem;
         });
     }

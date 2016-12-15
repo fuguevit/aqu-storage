@@ -97,7 +97,7 @@ class AliyunOssAdapter extends AbstractAdapter
 
     /**
      * Getter of OssClient.
-     * 
+     *
      * @return mixed
      */
     public function getClient()
@@ -128,7 +128,6 @@ class AliyunOssAdapter extends AbstractAdapter
         try {
             $this->client->putObject($this->getBucket(), $object, $contents, $options);
         } catch (OssException $e) {
-            
             return false;
         }
 
@@ -201,7 +200,6 @@ class AliyunOssAdapter extends AbstractAdapter
     public function rename($path, $newpath)
     {
         if (!$this->copy($path, $newpath)) {
-            
             return false;
         }
 
@@ -219,7 +217,6 @@ class AliyunOssAdapter extends AbstractAdapter
         try {
             $this->client->copyObject($this->bucket, $object, $this->bucket, $newObject);
         } catch (OssException $e) {
-            
             return false;
         }
 
@@ -236,7 +233,6 @@ class AliyunOssAdapter extends AbstractAdapter
         try {
             $this->client->deleteObject($this->bucket, $object);
         } catch (OssException $e) {
-            
             return false;
         }
 
@@ -267,7 +263,6 @@ class AliyunOssAdapter extends AbstractAdapter
         try {
             $this->client->deleteObject($this->bucket, $dirname);
         } catch (OssException $e) {
-            
             return false;
         }
 
@@ -351,7 +346,6 @@ class AliyunOssAdapter extends AbstractAdapter
         try {
             $this->client->createObjectDir($this->bucket, $object, $options);
         } catch (OssException $e) {
-            
             return false;
         }
 
@@ -436,7 +430,6 @@ class AliyunOssAdapter extends AbstractAdapter
 
         $result = array_map([$this, 'normalizeResponse'], $contents);
         $result = array_filter($result, function ($value) {
-            
             return $value['path'] !== false;
         });
 
@@ -453,7 +446,6 @@ class AliyunOssAdapter extends AbstractAdapter
         try {
             $objectMeta = $this->client->getObjectMeta($this->bucket, $object);
         } catch (OssException $e) {
-            
             return false;
         }
 
@@ -504,7 +496,6 @@ class AliyunOssAdapter extends AbstractAdapter
         try {
             $acl = $this->client->getObjectAcl($this->bucket, $object);
         } catch (OssException $e) {
-            
             return false;
         }
 
@@ -560,7 +551,7 @@ class AliyunOssAdapter extends AbstractAdapter
         if ($mimetype = $config->get('mimetype')) {
             $options['Content-Type'] = $mimetype;
         }
-        
+
         return $options;
     }
 

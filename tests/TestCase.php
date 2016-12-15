@@ -9,7 +9,7 @@ class TestCase extends OrchestraTestCase
 {
     protected $ossConfList;
     protected $qiniuConfList;
-    
+
     /**
      * {@inheritdoc}
      */
@@ -27,8 +27,8 @@ class TestCase extends OrchestraTestCase
     public function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
-        
-        $app['path.base'] = __DIR__ . '/../src';
+
+        $app['path.base'] = __DIR__.'/../src';
         $app['config']->set('filesystems.default', 'oss');
         $app['config']->set('filesystems.disks.oss', $this->ossConfList);
         $app['config']->set('filesystems.disks.qiniu', $this->qiniuConfList);
@@ -52,7 +52,7 @@ class TestCase extends OrchestraTestCase
             'bucket'      => env('OSS_BUCKET', ''),
             'endpoint'    => env('OSS_ENDPOINT', ''),
             'isCName'     => env('OSS_IS_CNAME', ''),
-            'debug'       => env('OSS_DEBUG', '')
+            'debug'       => env('OSS_DEBUG', ''),
         ];
     }
 
@@ -66,7 +66,7 @@ class TestCase extends OrchestraTestCase
             'access_key'  => env('QINIU_ACCESS_KEY', ''),
             'secret_key'  => env('QINIU_SECRET_KEY', ''),
             'bucket'      => env('QINIU_BUCKET'),
-            'debug'       => env('QINIU_DEBUG')
+            'debug'       => env('QINIU_DEBUG'),
         ];
     }
 

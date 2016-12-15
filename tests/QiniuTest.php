@@ -8,7 +8,7 @@ class QiniuTest extends TestCase
 {
     public function setUp()
     {
-        parent::setUp(); 
+        parent::setUp();
     }
 
     /**
