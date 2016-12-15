@@ -4,10 +4,12 @@ namespace Fuguevit\Storage\Providers;
 
 use Fuguevit\Storage\AliyunOssAdapter;
 use Fuguevit\Storage\Plugins\PutFile;
+use Fuguevit\Storage\QiniuAdapter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
 use OSS\OssClient;
+use Qiniu\Auth;
 
 class AquStorageServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,27 @@ class AquStorageServiceProvider extends ServiceProvider
             $filesystem = new Filesystem($adapter);
             $filesystem->addPlugin(new PutFile());
 
+            return $filesystem;
+        });
+
+        $this->initQiniuAdapter();
+    }
+
+    /**
+     * init qiniu adapter.
+     */
+    protected function initQiniuAdapter()
+    {
+        Storage::extend('qiniu', function($app, $config) {
+            $accessKey = $config['access_key'];
+            $secretKey = $config['secret_key'];
+            $bucket = $config['bucket'];
+
+            $auth = new Auth($accessKey, $secretKey);
+            $adapter = new QiniuAdapter($auth, $bucket);
+            $filesystem = new Filesystem($adapter);
+            $filesystem->addPlugin(new PutFile());
+            
             return $filesystem;
         });
     }

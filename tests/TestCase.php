@@ -8,6 +8,7 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 class TestCase extends OrchestraTestCase
 {
     protected $ossConfList;
+    protected $qiniuConfList;
     
     /**
      * {@inheritdoc}
@@ -16,6 +17,7 @@ class TestCase extends OrchestraTestCase
     {
         $this->initDotEnv();
         $this->initOssConfig();
+        $this->initQiniuConfig();
         parent::setUp();
     }
 
@@ -29,6 +31,7 @@ class TestCase extends OrchestraTestCase
         $app['path.base'] = __DIR__ . '/../src';
         $app['config']->set('filesystems.default', 'oss');
         $app['config']->set('filesystems.disks.oss', $this->ossConfList);
+        $app['config']->set('filesystems.disks.qiniu', $this->qiniuConfList);
     }
 
     protected function initDotEnv()
@@ -50,6 +53,20 @@ class TestCase extends OrchestraTestCase
             'endpoint'    => env('OSS_ENDPOINT', ''),
             'isCName'     => env('OSS_IS_CNAME', ''),
             'debug'       => env('OSS_DEBUG', '')
+        ];
+    }
+
+    /**
+     * Init Qiniu Configuration.
+     */
+    protected function initQiniuConfig()
+    {
+        $this->qiniuConfList = [
+            'driver'      => 'qiniu',
+            'access_key'  => env('QINIU_ACCESS_KEY', ''),
+            'secret_key'  => env('QINIU_SECRET_KEY', ''),
+            'bucket'      => env('QINIU_BUCKET'),
+            'debug'       => env('QINIU_DEBUG')
         ];
     }
 
