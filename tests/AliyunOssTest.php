@@ -2,7 +2,6 @@
 
 namespace Fuguevit\Storage\Tests;
 
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class AliyunOssTest extends TestCase
@@ -22,8 +21,8 @@ class AliyunOssTest extends TestCase
      */
     public function test_it_can_push_file_to_oss()
     {
-        Storage::put('samples/sample_img.jpg', new File(__DIR__.'/assets/sample_img.jpg'));
+        Storage::put('samples/sample_img.jpg', file_get_contents(__DIR__.'/assets/sample_img.jpg'));
 
-        $this->assertTrue(true);
+        $this->assertTrue(Storage::exists('samples/sample_img.jpg'));
     }
 }

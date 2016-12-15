@@ -567,7 +567,7 @@ class AliyunOssAdapter extends AbstractAdapter
             $result['timestamp'] = strtotime($object['LastModified']);
         }
 
-        if (substr($result['pah'], -1) === '/') {
+        if (substr($result['path'], -1) === '/') {
             $result['type'] = 'dir';
             $result['path'] = rtrim($result['path'], '/');
 
