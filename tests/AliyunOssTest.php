@@ -32,7 +32,7 @@ class AliyunOssTest extends TestCase
     public function test_it_can_delete_file_from_oss()
     {
         Storage::delete('samples/sample_img.jpg');
-        
+
         $this->assertTrue(!Storage::exists('samples/sample_img.jpg'));
     }
 
@@ -42,7 +42,7 @@ class AliyunOssTest extends TestCase
     public function test_it_can_put_with_file_path_to_oss()
     {
         Storage::putFile('samples/sample_img.jpg', __DIR__.'/assets/sample_img.jpg');
-        
+
         $this->assertTrue(Storage::exists('samples/sample_img.jpg'));
     }
 }

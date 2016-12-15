@@ -13,9 +13,9 @@ class QiniuAdapter extends AbstractAdapter
      * @var Auth
      */
     protected $auth;
-    
+
     protected $bucket;
-    
+
     public function __construct(Auth $auth, $bucket)
     {
         $this->auth = $auth;
@@ -27,7 +27,6 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function write($path, $contents, Config $config)
     {
-        
     }
 
     /**
@@ -35,26 +34,26 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function writeStream($path, $resource, Config $config)
     {
-
-        
     }
 
     /**
      * @param $path
      * @param $filePath
      * @param Config $config
+     *
      * @return array|bool
      */
-    public function writeFile($path , $filePath, Config $config)
+    public function writeFile($path, $filePath, Config $config)
     {
         $object = $this->applyPathPrefix($path);
         $token = $this->auth->uploadToken($this->bucket);
         $uploadMgr = new UploadManager();
         try {
-           $result = $uploadMgr->putFile($token, $object, $filePath);
+            $result = $uploadMgr->putFile($token, $object, $filePath);
         } catch (\Exception $e) {
             return false;
         }
+
         return $result;
     }
 
