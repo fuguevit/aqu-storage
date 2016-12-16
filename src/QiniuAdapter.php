@@ -5,6 +5,7 @@ namespace Fuguevit\Storage;
 use League\Flysystem\Adapter\AbstractAdapter;
 use League\Flysystem\Config;
 use Qiniu\Auth;
+use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 
 class QiniuAdapter extends AbstractAdapter
@@ -27,6 +28,22 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function write($path, $contents, Config $config)
     {
+        if (gettype($contents) == 'resource') {
+            $contents = stream_get_contents($contents);
+        }
+        
+        $object = $this->applyPathPrefix($path);
+        $token = $this->auth->uploadToken($this->bucket);
+        // new upload manager
+        $uploadMgr = new UploadManager();
+        try {
+            $result = $uploadMgr->put($token, $object, $contents);
+        } catch (\Exception $e) {
+            
+            return false;
+        }
+        
+        return $result;
     }
 
     /**
@@ -34,6 +51,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function writeStream($path, $resource, Config $config)
     {
+        return $this->write($path, $resource, $config);
     }
 
     /**
@@ -47,10 +65,12 @@ class QiniuAdapter extends AbstractAdapter
     {
         $object = $this->applyPathPrefix($path);
         $token = $this->auth->uploadToken($this->bucket);
+        // new upload manager
         $uploadMgr = new UploadManager();
         try {
             $result = $uploadMgr->putFile($token, $object, $filePath);
         } catch (\Exception $e) {
+            
             return false;
         }
 
@@ -90,6 +110,20 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function delete($path)
     {
+        $object = $this->applyPathPrefix($path);
+        // new bucket manager
+        $bucketMgr = new BucketManager($this->auth);
+        try {
+            $result = $bucketMgr->delete($this->bucket, $object);
+        } catch (\Exception $e) {
+            
+            return false;
+        }
+    
+        if ($result !== null) {
+            return $result;
+        }
+        return true;
     }
 
     /**
@@ -97,6 +131,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
+        
     }
 
     /**
@@ -104,6 +139,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
+        
     }
 
     /**
@@ -118,6 +154,20 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function has($path)
     {
+        $object = $this->applyPathPrefix($path);
+        // new bucket manager
+        $bucketMgr = new BucketManager($this->auth);
+        try {
+            list($ret, $err) = $bucketMgr->stat($this->bucket, $object);
+        } catch (\Exception $e) {
+
+            return false;
+        }
+
+        if ($err !== null) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -125,6 +175,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function read($path)
     {
+        
     }
 
     /**
