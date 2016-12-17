@@ -105,6 +105,20 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function copy($path, $newpath)
     {
+        $object = $this->applyPathPrefix($path);
+        // new bucket manager
+        $bucketMgr = new BucketManager($this->auth);
+        try {
+            $result = $bucketMgr->copy($this->bucket, $object, $this->bucket, $object);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        if($result!==null) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
