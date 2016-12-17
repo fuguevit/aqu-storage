@@ -82,6 +82,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function update($path, $contents, Config $config)
     {
+        return $this->write($path, $contents, $config);
     }
 
     /**
@@ -89,6 +90,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function updateStream($path, $resource, Config $config)
     {
+        return $this->write($path, $resource, $config);
     }
 
     /**
