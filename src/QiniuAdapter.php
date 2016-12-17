@@ -31,7 +31,7 @@ class QiniuAdapter extends AbstractAdapter
         if (gettype($contents) == 'resource') {
             $contents = stream_get_contents($contents);
         }
-        
+
         $object = $this->applyPathPrefix($path);
         $token = $this->auth->uploadToken($this->bucket);
         // new upload manager
@@ -39,10 +39,9 @@ class QiniuAdapter extends AbstractAdapter
         try {
             $result = $uploadMgr->put($token, $object, $contents);
         } catch (\Exception $e) {
-            
             return false;
         }
-        
+
         return $result;
     }
 
@@ -70,7 +69,6 @@ class QiniuAdapter extends AbstractAdapter
         try {
             $result = $uploadMgr->putFile($token, $object, $filePath);
         } catch (\Exception $e) {
-            
             return false;
         }
 
@@ -114,7 +112,7 @@ class QiniuAdapter extends AbstractAdapter
             return false;
         }
 
-        if($result!==null) {
+        if ($result !== null) {
             return false;
         }
 
@@ -132,13 +130,13 @@ class QiniuAdapter extends AbstractAdapter
         try {
             $result = $bucketMgr->delete($this->bucket, $object);
         } catch (\Exception $e) {
-            
             return false;
         }
-    
+
         if ($result !== null) {
             return $result;
         }
+
         return true;
     }
 
@@ -147,7 +145,6 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
-        
     }
 
     /**
@@ -155,7 +152,6 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
-        
     }
 
     /**
@@ -176,13 +172,13 @@ class QiniuAdapter extends AbstractAdapter
         try {
             list($ret, $err) = $bucketMgr->stat($this->bucket, $object);
         } catch (\Exception $e) {
-
             return false;
         }
 
         if ($err !== null) {
             return false;
         }
+
         return true;
     }
 
@@ -191,7 +187,6 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function read($path)
     {
-        
     }
 
     /**
