@@ -28,7 +28,7 @@ class QiniuTest extends TestCase
         Storage::disk('qiniu')->delete('samples/sample_img.png');
         $this->assertTrue(!Storage::disk('qiniu')->exists('samples/sample_img.jpg'));
     }
-    
+
     /**
      * Test method putFile.
      */
