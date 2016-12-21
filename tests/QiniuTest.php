@@ -37,4 +37,13 @@ class QiniuTest extends TestCase
         Storage::disk('qiniu')->putFile('samples/sample_img.jpg', __DIR__.'/assets/sample_img.jpg');
         $this->assertTrue(Storage::disk('qiniu')->exists('samples/sample_img.jpg'));
     }
+
+    /**
+     * Test method getMetadata.
+     */
+    public function test_it_can_get_metadata()
+    {
+        $result = Storage::disk('qiniu')->getMetadata('samples/sample_img.jpg');
+        $this->assertArrayHasKey('fsize', $result);
+    }
 }

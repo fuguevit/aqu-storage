@@ -244,7 +244,13 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getSize($path)
     {
+        $object = $this->applyPathPrefix($path);
+        $result = $this->getMetadata($object);
+        if (!$result || !array_key_exists('fsize', $result)) {
+            return false;
+        }
         
+        return $result['fsize'];
     }
 
     /**
@@ -252,7 +258,13 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getMimetype($path)
     {
-        
+        $object = $this->applyPathPrefix($path);
+        $result = $this->getMetadata($object);
+        if (!$result || !array_key_exists('mimeType', $result)) {
+            return false;
+        }
+
+        return $result['mimeType'];
     }
 
     /**
@@ -260,7 +272,13 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getTimestamp($path)
     {
-        
+        $object = $this->applyPathPrefix($path);
+        $result = $this->getMetadata($object);
+        if (!$result || !array_key_exists('putTime', $result)) {
+            return false;
+        }
+
+        return $result['putTime'];
     }
 
     /**
@@ -268,6 +286,6 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getVisibility($path)
     {
-        
+        return true;
     }
 }
