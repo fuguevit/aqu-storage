@@ -249,8 +249,9 @@ class QiniuAdapter extends AbstractAdapter
         if (!$result || !array_key_exists('fsize', $result)) {
             return false;
         }
+        $result['size'] = $result['fsize'];
         
-        return $result['fsize'];
+        return $result;
     }
 
     /**
@@ -263,8 +264,9 @@ class QiniuAdapter extends AbstractAdapter
         if (!$result || !array_key_exists('mimeType', $result)) {
             return false;
         }
-
-        return $result['mimeType'];
+        $result['mimetype'] = $result['mimeType'];
+        
+        return $result;
     }
 
     /**
@@ -277,8 +279,9 @@ class QiniuAdapter extends AbstractAdapter
         if (!$result || !array_key_exists('putTime', $result)) {
             return false;
         }
-
-        return $result['putTime'];
+        $result['timestamp'] = $result['putTime'];
+        
+        return $result;
     }
 
     /**
