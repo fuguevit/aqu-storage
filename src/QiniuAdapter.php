@@ -104,8 +104,8 @@ class QiniuAdapter extends AbstractAdapter
             $result = $bucketMgr->move($this->bucket, $object, $this->bucket, $newObject);
         } catch (\Exception $e) {
             return false;
-        } 
-        
+        }
+
         if ($result !== null) {
             return false;
         }
@@ -231,7 +231,7 @@ class QiniuAdapter extends AbstractAdapter
         } catch (\Exception $e) {
             return false;
         }
-        
+
         if ($err !== null) {
             return false;
         }
@@ -249,7 +249,7 @@ class QiniuAdapter extends AbstractAdapter
         if (!$result || !array_key_exists('fsize', $result)) {
             return false;
         }
-        
+
         return $result['fsize'];
     }
 
