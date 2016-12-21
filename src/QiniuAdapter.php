@@ -96,6 +96,21 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
+        $object = $this->applyPathPrefix($path);
+        $newObject = $this->applyPathPrefix($newpath);
+        // new bucket manager
+        $bucketMgr = new BucketManager($this->auth);
+        try {
+            $result = $bucketMgr->move($this->bucket, $object, $this->bucket, $newObject);
+        } catch (\Exception $e) {
+            return false;
+        } 
+        
+        if ($result !== null) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
