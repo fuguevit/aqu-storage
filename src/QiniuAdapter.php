@@ -223,6 +223,20 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getMetadata($path)
     {
+        $object = $this->applyPathPrefix($path);
+        // new bucket manager
+        $bucketMgr = new BucketManager($this->auth);
+        try {
+            list($ret, $err) = $bucketMgr->stat($this->bucket, $object);
+        } catch (\Exception $e) {
+            return false;
+        }
+        
+        if ($err !== null) {
+            return false;
+        }
+
+        return $ret;
     }
 
     /**
@@ -230,6 +244,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getSize($path)
     {
+        
     }
 
     /**
@@ -237,6 +252,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getMimetype($path)
     {
+        
     }
 
     /**
@@ -244,6 +260,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getTimestamp($path)
     {
+        
     }
 
     /**
@@ -251,5 +268,6 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getVisibility($path)
     {
+        
     }
 }
