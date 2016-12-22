@@ -218,7 +218,7 @@ class QiniuAdapter extends AbstractAdapter
 
         $authUrl = $this->auth->privateDownloadUrl($url);
         $result['contents'] = file_get_contents($authUrl);
-        
+
         return $result;
     }
 
@@ -228,10 +228,12 @@ class QiniuAdapter extends AbstractAdapter
     public function readStream($path)
     {
         $url = $this->generatePrivateDownloadUrl($path, true);
-        if($stream = fopen($url, 'r')) {
+        if ($stream = fopen($url, 'r')) {
             $result['stream'] = $stream;
+
             return $result;
         }
+
         return false;
     }
 
@@ -274,7 +276,7 @@ class QiniuAdapter extends AbstractAdapter
             return false;
         }
         $result['size'] = $result['fsize'];
-        
+
         return $result;
     }
 
@@ -289,7 +291,7 @@ class QiniuAdapter extends AbstractAdapter
             return false;
         }
         $result['mimetype'] = $result['mimeType'];
-        
+
         return $result;
     }
 
@@ -304,7 +306,7 @@ class QiniuAdapter extends AbstractAdapter
             return false;
         }
         $result['timestamp'] = $result['putTime'];
-        
+
         return $result;
     }
 
@@ -318,8 +320,10 @@ class QiniuAdapter extends AbstractAdapter
 
     /**
      * Generate private download url.
+     *
      * @param $path
      * @param $needHeader
+     *
      * @return string
      */
     protected function generatePrivateDownloadUrl($path, $needHeader = false)
@@ -329,7 +333,7 @@ class QiniuAdapter extends AbstractAdapter
         if ($needHeader && !starts_with($url, 'http://')) {
             $url = 'http://'.$url;
         }
-        
+
         return $url;
     }
 }
