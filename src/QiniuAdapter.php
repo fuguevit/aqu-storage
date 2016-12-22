@@ -15,12 +15,21 @@ class QiniuAdapter extends AbstractAdapter
      */
     protected $auth;
 
+    /**
+     * @var string
+     */
     protected $bucket;
 
-    public function __construct(Auth $auth, $bucket)
+    /**
+     * @var string
+     */
+    protected $baseUrl;
+
+    public function __construct(Auth $auth, $bucket, $baseUrl)
     {
         $this->auth = $auth;
         $this->bucket = $bucket;
+        $this->baseUrl = $baseUrl;
     }
 
     /**
@@ -205,6 +214,15 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function read($path)
     {
+        $object = $this->applyPathPrefix($path);
+        $url = rtrim($this->baseUrl, '/').'/'.ltrim($object);
+        if (!starts_with($url, 'http://')) {
+            $url = 'http://'.$url;
+        }
+        $authUrl = $this->auth->privateDownloadUrl($url);
+        $result['contents'] = file_get_contents($authUrl);
+        
+        return $result;
     }
 
     /**

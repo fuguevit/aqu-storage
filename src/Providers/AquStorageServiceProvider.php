@@ -46,9 +46,9 @@ class AquStorageServiceProvider extends ServiceProvider
             $accessKey = $config['access_key'];
             $secretKey = $config['secret_key'];
             $bucket = $config['bucket'];
-
+            $baseUrl = $config['base_url'];
             $auth = new Auth($accessKey, $secretKey);
-            $adapter = new QiniuAdapter($auth, $bucket);
+            $adapter = new QiniuAdapter($auth, $bucket, $baseUrl);
             $filesystem = new Filesystem($adapter);
             $filesystem->addPlugin(new PutFile());
 

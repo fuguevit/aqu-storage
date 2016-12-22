@@ -66,6 +66,7 @@ class TestCase extends OrchestraTestCase
             'access_key'  => env('QINIU_ACCESS_KEY', ''),
             'secret_key'  => env('QINIU_SECRET_KEY', ''),
             'bucket'      => env('QINIU_BUCKET'),
+            'base_url'    => env('QINIU_BASEURL'),
             'debug'       => env('QINIU_DEBUG'),
         ];
     }

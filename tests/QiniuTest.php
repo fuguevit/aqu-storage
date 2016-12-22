@@ -46,4 +46,13 @@ class QiniuTest extends TestCase
         $result = Storage::disk('qiniu')->getMetadata('samples/sample_img.jpg');
         $this->assertArrayHasKey('fsize', $result);
     }
+
+    /**
+     * Test method read.
+     */
+    public function test_it_can_read_object()
+    {
+        $result = Storage::disk('qiniu')->read('samples/sample_img.jpg');
+        dd($result);
+    }
 }
