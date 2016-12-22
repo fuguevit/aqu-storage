@@ -160,6 +160,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
+        return false;
     }
 
     /**
@@ -167,6 +168,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
+        return false;
     }
 
     /**
@@ -174,6 +176,7 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function setVisibility($path, $visibility)
     {
+        return false;
     }
 
     /**
@@ -289,5 +292,6 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function getVisibility($path)
     {
+        return false;
     }
 }
