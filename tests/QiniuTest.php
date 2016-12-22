@@ -53,6 +53,16 @@ class QiniuTest extends TestCase
     public function test_it_can_read_object()
     {
         $result = Storage::disk('qiniu')->read('samples/sample_img.jpg');
-        dd($result);
+        $content = file_get_contents(__DIR__.'/assets/sample_img.jpg');
+        $this->assertSame($result, $content);
+    }
+
+    /**
+     * Test method readStream.
+     */
+    public function test_it_can_read_stream()
+    {
+        $result = Storage::disk('qiniu')->readStream('samples/sample_img.jpg');
+        $this->assertTrue(gettype($result)=='resource');
     }
 }
