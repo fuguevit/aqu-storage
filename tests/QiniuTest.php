@@ -25,7 +25,7 @@ class QiniuTest extends TestCase
      */
     public function test_it_can_delete_object_from_qiniu()
     {
-        Storage::disk('qiniu')->delete('samples/sample_img.png');
+        Storage::disk('qiniu')->delete('samples/sample_img.jpg');
         $this->assertTrue(!Storage::disk('qiniu')->exists('samples/sample_img.jpg'));
     }
 

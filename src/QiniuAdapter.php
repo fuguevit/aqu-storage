@@ -152,13 +152,12 @@ class QiniuAdapter extends AbstractAdapter
         // new bucket manager
         $bucketMgr = new BucketManager($this->auth);
         try {
-            $result = $bucketMgr->delete($this->bucket, $object);
+            $err = $bucketMgr->delete($this->bucket, $object);
         } catch (\Exception $e) {
             return false;
         }
-
-        if ($result !== null) {
-            return $result;
+        if ($err !== null) {
+            return false;
         }
 
         return true;
