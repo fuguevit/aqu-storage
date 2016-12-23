@@ -241,6 +241,27 @@ class QiniuAdapter extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
+        $bucketMgr = new BucketManager($this->auth);
+
+        list($items, $marker, $err) = $bucketMgr->listFiles($this->bucket, $directory);
+        if ($err !== null) {
+            return array();
+        }
+
+        $contents = [];
+        foreach ($items as $item) {
+            $normalized = [
+                'type'      => 'file',
+                'path'      => $item['key'],
+                'timestamp' => $item['putTime'],
+                'mimetype'  => $item['mimeType'],
+                'size'      => $item['fsize']
+            ];
+
+            array_push($contents, $normalized);
+        }
+
+        return $contents;
     }
 
     /**
