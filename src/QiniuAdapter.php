@@ -245,7 +245,7 @@ class QiniuAdapter extends AbstractAdapter
 
         list($items, $marker, $err) = $bucketMgr->listFiles($this->bucket, $directory);
         if ($err !== null) {
-            return array();
+            return [];
         }
 
         $contents = [];
@@ -255,7 +255,7 @@ class QiniuAdapter extends AbstractAdapter
                 'path'      => $item['key'],
                 'timestamp' => $item['putTime'],
                 'mimetype'  => $item['mimeType'],
-                'size'      => $item['fsize']
+                'size'      => $item['fsize'],
             ];
 
             array_push($contents, $normalized);
