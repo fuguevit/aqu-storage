@@ -18,6 +18,16 @@ class AquStorageServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->initAliyunOssAdapter();
+
+        $this->initQiniuAdapter();
+    }
+
+    /**
+     * init AliyunOss adapter.
+     */
+    protected function initAliyunOssAdapter()
+    {
         Storage::extend('oss', function ($app, $config) {
             $accessId = $config['access_id'];
             $accessKey = $config['access_key'];
@@ -33,8 +43,6 @@ class AquStorageServiceProvider extends ServiceProvider
 
             return $filesystem;
         });
-
-        $this->initQiniuAdapter();
     }
 
     /**
