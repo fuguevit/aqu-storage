@@ -72,6 +72,14 @@ return [
             'debug'       => env('QINIU_DEBUG', ''),
         ],
 
+        'upyun' => [
+            'driver'        => 'upyun',
+            'bucket'        => env('UPYUN_BUCKET', ''),
+            'operator_name' => env('UPYUN_OPERATOR_NAME', ''),
+            'operator_pwd'  => env('UPYUN_OPERATOR_PWD', ''),
+            'debug'         => env('UPYUN_DEBUG', ''),
+        ],
+
         'ftp' => [
             'driver'   => 'ftp',
             'host'     => 'ftp.example.com',
