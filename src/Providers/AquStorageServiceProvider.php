@@ -71,9 +71,7 @@ class AquStorageServiceProvider extends ServiceProvider
      */
     protected function initUpyunAdapter()
     {
-        Storage::extend('upyun', function($app, $config) {
-
-
+        Storage::extend('upyun', function ($app, $config) {
         });
     }
 

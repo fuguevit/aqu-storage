@@ -12,7 +12,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function write($path, $contents, Config $config)
     {
-
     }
 
     /**
