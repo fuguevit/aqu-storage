@@ -21,6 +21,8 @@ class AquStorageServiceProvider extends ServiceProvider
         $this->initAliyunOssAdapter();
 
         $this->initQiniuAdapter();
+
+        $this->initUpyunAdapter();
     }
 
     /**
@@ -61,6 +63,17 @@ class AquStorageServiceProvider extends ServiceProvider
             $filesystem->addPlugin(new PutFile());
 
             return $filesystem;
+        });
+    }
+
+    /**
+     * init Upyun adapter.
+     */
+    protected function initUpyunAdapter()
+    {
+        Storage::extend('upyun', function($app, $config) {
+
+
         });
     }
 
