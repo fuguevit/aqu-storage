@@ -144,10 +144,10 @@ class UpyunAdapter extends AbstractAdapter
         $objectDir = $this->applyPathPrefix($dirname);
         try {
             $result = $this->client->createDir($objectDir);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
-        
+
         return $result;
     }
 
