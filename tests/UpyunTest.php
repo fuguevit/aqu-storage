@@ -19,7 +19,7 @@ class UpyunTest extends TestCase
         Storage::disk('upyun')->put('samples/sample_img.jpg', file_get_contents(__DIR__.'/assets/sample_img.jpg'));
         $this->assertTrue(Storage::disk('upyun')->exists('samples/sample_img.jpg'));
     }
-    
+
     /**
      * readStream test.
      */
