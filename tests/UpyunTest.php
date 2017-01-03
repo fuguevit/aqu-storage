@@ -45,4 +45,16 @@ class UpyunTest extends TestCase
         Storage::disk('upyun')->putFile('samples/test_img.jpg', __DIR__.'/assets/sample_img.jpg');
         $this->assertTrue(Storage::disk('upyun')->exists('samples/test_img.jpg'));
     }
+
+    /**
+     * rename method test.
+     */
+    public function test_it_can_rename_file()
+    {
+        if (Storage::disk('upyun')->exists('samples/test2_img.jpg')) {
+            Storage::disk('upyun')->delete('samples/test2_img.jpg');
+        }
+        Storage::disk('upyun')->rename('samples/test_img.jpg', 'samples/test2_img.jpg');
+        $this->assertTrue(Storage::disk('upyun')->exists('samples/test2_img.jpg'));
+    }
 }

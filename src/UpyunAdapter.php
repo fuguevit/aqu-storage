@@ -74,6 +74,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function update($path, $contents, Config $config)
     {
+        return $this->write($path, $contents, $config);
     }
 
     /**
@@ -81,6 +82,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function updateStream($path, $resource, Config $config)
     {
+        return $this->write($path, $resource, $config);
     }
 
     /**
@@ -88,6 +90,13 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
+        try {
+            $this->copy($path, $newpath);
+            $this->delete($path);
+        } catch (\Exception $e) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -95,6 +104,17 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function copy($path, $newpath)
     {
+        $object = $this->applyPathPrefix($path);
+        $newObject = $this->applyPathPrefix($newpath);
+
+        try {
+            $contents = $this->client->read($object);
+            $this->client->write($newObject, $contents);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -216,5 +236,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getVisibility($path)
     {
+        return true;
     }
 }
