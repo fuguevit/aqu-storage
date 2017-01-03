@@ -84,7 +84,7 @@ class TestCase extends OrchestraTestCase
             'operator_pwd'  => env('UPYUN_OPERATOR_PWD', ''),
         ];
     }
-    
+
     /**
      * {@inheritdoc}
      */
