@@ -9,6 +9,7 @@ class TestCase extends OrchestraTestCase
 {
     protected $ossConfList;
     protected $qiniuConfList;
+    protected $upyunConfList;
 
     /**
      * {@inheritdoc}
@@ -18,6 +19,7 @@ class TestCase extends OrchestraTestCase
         $this->initDotEnv();
         $this->initOssConfig();
         $this->initQiniuConfig();
+        $this->initUpyunConfig();
         parent::setUp();
     }
 
@@ -32,6 +34,7 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('filesystems.default', 'oss');
         $app['config']->set('filesystems.disks.oss', $this->ossConfList);
         $app['config']->set('filesystems.disks.qiniu', $this->qiniuConfList);
+        $app['config']->set('filesystems.disks.upyun', $this->upyunConfList);
     }
 
     protected function initDotEnv()
@@ -71,6 +74,17 @@ class TestCase extends OrchestraTestCase
         ];
     }
 
+    public function initUpyunConfig()
+    {
+        $this->upyunConfList = [
+            'driver'        => 'upyun',
+            'bucket'        => env('UPYUN_BUCKET', ''),
+            'debug'         => env('UPYUN_DEBUG', ''),
+            'operator_name' => env('UPYUN_OPERATOR_NAME', ''),
+            'operator_pwd'  => env('UPYUN_OPERATOR_PWD', ''),
+        ];
+    }
+    
     /**
      * {@inheritdoc}
      */
