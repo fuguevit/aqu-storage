@@ -83,7 +83,7 @@ class AquStorageServiceProvider extends ServiceProvider
             $adapter = new UpyunAdapter($bucketConfig);
             $filesystem = new Filesystem($adapter);
             $filesystem->addPlugin(new PutFile());
-            
+
             return $filesystem;
         });
     }
