@@ -9,7 +9,7 @@ use Upyun\Upyun;
 class UpyunAdapter extends AbstractAdapter
 {
     /**
-     * @var 
+     * @var
      */
     protected $config;
 
@@ -17,8 +17,7 @@ class UpyunAdapter extends AbstractAdapter
      * @var
      */
     protected $client;
-    
-    
+
     public function __construct($config)
     {
         $this->config = $config;
@@ -59,7 +58,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function writeFile($path, $filePath, Config $config)
     {
-
     }
 
     /**
@@ -67,7 +65,6 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function update($path, $contents, Config $config)
     {
-
     }
 
     /**
