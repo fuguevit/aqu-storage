@@ -146,6 +146,14 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function read($path)
     {
+        $object = $this->applyPathPrefix($path);
+        try {
+            $result['contents'] = $this->client->read($object);
+        } catch (\Exception $e) {
+            return false;
+        }
+        
+        return $result;
     }
 
     /**
