@@ -5,11 +5,13 @@ namespace Fuguevit\Storage\Providers;
 use Fuguevit\Storage\AliyunOssAdapter;
 use Fuguevit\Storage\Plugins\PutFile;
 use Fuguevit\Storage\QiniuAdapter;
+use Fuguevit\Storage\UpyunAdapter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
 use OSS\OssClient;
 use Qiniu\Auth;
+use Upyun\Config;
 
 class AquStorageServiceProvider extends ServiceProvider
 {
@@ -72,6 +74,17 @@ class AquStorageServiceProvider extends ServiceProvider
     protected function initUpyunAdapter()
     {
         Storage::extend('upyun', function ($app, $config) {
+            $bucket = $config['bucket'];
+            $operatorName = $config['operator_name'];
+            $operatorPwd = $config['operator_pwd'];
+            $debug = $config['debug'];
+
+            $bucketConfig = new Config($bucket, $operatorName, $operatorPwd);
+            $adapter = new UpyunAdapter($bucketConfig);
+            $filesystem = new Filesystem($adapter);
+            $filesystem->addPlugin(new PutFile());
+            
+            return $filesystem;
         });
     }
 

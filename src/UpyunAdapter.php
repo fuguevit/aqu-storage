@@ -4,9 +4,27 @@ namespace Fuguevit\Storage;
 
 use League\Flysystem\Adapter\AbstractAdapter;
 use League\Flysystem\Config;
+use Upyun\Upyun;
 
 class UpyunAdapter extends AbstractAdapter
 {
+    /**
+     * @var 
+     */
+    protected $config;
+
+    /**
+     * @var
+     */
+    protected $client;
+    
+    
+    public function __construct($config)
+    {
+        $this->config = $config;
+        $this->client = new Upyun($config);
+    }
+
     /**
      * {@inheritdoc}
      */
