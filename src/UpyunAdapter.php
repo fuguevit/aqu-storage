@@ -141,6 +141,14 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
+        $objectDir = $this->applyPathPrefix($dirname);
+        try {
+            $result = $this->client->createDir($objectDir);
+        } catch(\Exception $e) {
+            return false;
+        }
+        
+        return $result;
     }
 
     /**
@@ -148,6 +156,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function setVisibility($path, $visibility)
     {
+        return true;
     }
 
     /**
