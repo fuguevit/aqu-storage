@@ -66,7 +66,6 @@ class UpyunAdapter extends AbstractAdapter
         } catch (\Exception $e) {
             return false;
         }
-
         return $result;
     }
 
@@ -103,6 +102,8 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function delete($path)
     {
+        $object = $this->applyPathPrefix($path);
+        return $this->client->delete($object);
     }
 
     /**
