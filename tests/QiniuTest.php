@@ -16,7 +16,7 @@ class QiniuTest extends TestCase
      */
     public function test_it_can_write_content_to_qiniu()
     {
-        Storage::disk('qiniu')->put('samples/sample_img.png', file_get_contents(__DIR__.'/assets/sample_img.jpg'));
+        Storage::disk('qiniu')->put('samples/sample_img.jpg', file_get_contents(__DIR__.'/assets/sample_img.jpg'));
         $this->assertTrue(Storage::disk('qiniu')->exists('samples/sample_img.jpg'));
     }
 

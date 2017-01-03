@@ -161,6 +161,18 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function readStream($path)
     {
+        try {
+            if (!($result = $this->read($path))) {
+                return false;
+            }
+            $result['stream'] = fopen('php://memory', 'r+');
+            fwrite($result['stream'], $result['contents']);
+            rewind($result['stream']);
+            unset($result['contents']);
+        } catch (\Exception $e) {
+            return false;
+        }
+        return $result;
     }
 
     /**
