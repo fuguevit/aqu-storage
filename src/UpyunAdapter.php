@@ -30,6 +30,18 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function write($path, $contents, Config $config)
     {
+        if (gettype($contents) == 'resource') {
+            $contents = stream_get_contents($contents);
+        }
+
+        $object = $this->applyPathPrefix($path);
+        try {
+            $result = $this->client->write($object, $contents);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return $result;
     }
 
     /**
@@ -37,6 +49,17 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function writeStream($path, $resource, Config $config)
     {
+        return $this->write($path, $resource, $config);
+    }
+
+    /**
+     * @param $path
+     * @param $filePath
+     * @param Config $config
+     */
+    public function writeFile($path, $filePath, Config $config)
+    {
+
     }
 
     /**
@@ -44,6 +67,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function update($path, $contents, Config $config)
     {
+
     }
 
     /**
