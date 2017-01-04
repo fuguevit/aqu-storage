@@ -135,7 +135,7 @@ class UpyunAdapter extends AbstractAdapter
     public function deleteDir($dirname)
     {
         $objectDir = $this->applyPathPrefix($dirname);
-        
+
         return $this->client->deleteDir($objectDir);
     }
 
@@ -227,7 +227,7 @@ class UpyunAdapter extends AbstractAdapter
     {
         $object = $this->applyPathPrefix($path);
         $result = $this->client->info($object);
-        
+
         return $this->formatUpyunMetaData($result);
     }
 
@@ -265,18 +265,19 @@ class UpyunAdapter extends AbstractAdapter
 
     /**
      * @param $metadata
+     *
      * @return bool | array
      */
     protected function formatUpyunMetaData($metadata)
     {
         $originParam = ['x-upyun-file-size', 'x-upyun-file-date'];
-        
+
         if (gettype($metadata) != 'array') {
             return false;
         }
-        
+
         foreach ($originParam as $param) {
-            if (!key_exists($param, $metadata)) {
+            if (!array_key_exists($param, $metadata)) {
                 return false;
             }
         }
@@ -296,7 +297,7 @@ class UpyunAdapter extends AbstractAdapter
                     break;
             }
         }
-        
+
         return $newMetaData;
     }
 }
