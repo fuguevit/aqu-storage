@@ -134,6 +134,9 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
+        $objectDir = $this->applyPathPrefix($dirname);
+        
+        return $this->client->deleteDir($objectDir);
     }
 
     /**
@@ -214,6 +217,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
+        return [];
     }
 
     /**
@@ -221,6 +225,10 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getMetadata($path)
     {
+        $object = $this->applyPathPrefix($path);
+        $result = $this->client->info($object);
+        
+        return $this->formatUpyunMetaData($result);
     }
 
     /**
@@ -228,6 +236,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getSize($path)
     {
+        return $this->getMetadata($path);
     }
 
     /**
@@ -235,6 +244,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getMimetype($path)
     {
+        return false;
     }
 
     /**
@@ -242,6 +252,7 @@ class UpyunAdapter extends AbstractAdapter
      */
     public function getTimestamp($path)
     {
+        return $this->getMetadata($path);
     }
 
     /**
@@ -250,5 +261,42 @@ class UpyunAdapter extends AbstractAdapter
     public function getVisibility($path)
     {
         return true;
+    }
+
+    /**
+     * @param $metadata
+     * @return bool | array
+     */
+    protected function formatUpyunMetaData($metadata)
+    {
+        $originParam = ['x-upyun-file-size', 'x-upyun-file-date'];
+        
+        if (gettype($metadata) != 'array') {
+            return false;
+        }
+        
+        foreach ($originParam as $param) {
+            if (!key_exists($param, $metadata)) {
+                return false;
+            }
+        }
+
+        $newMetaData = $metadata;
+        foreach ($originParam as $param) {
+            switch ($param) {
+                case 'x-upyun-file-size':
+                    $newMetaData['size'] = $newMetaData[$param];
+                    unset($newMetaData[$param]);
+                    break;
+                case 'x-upyun-file-date':
+                    $newMetaData['timestamp'] = $newMetaData[$param];
+                    unset($newMetaData[$param]);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        return $newMetaData;
     }
 }

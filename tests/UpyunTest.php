@@ -30,28 +30,30 @@ class UpyunTest extends TestCase
     }
 
     /**
-     * delete method test.
-     */
-    public function test_it_can_delete_file()
-    {
-        $this->assertTrue(Storage::disk('upyun')->delete('samples/sample_img.jpg'));
-    }
-
-    /**
      * putFile method test.
      */
-    public function test_it_can_write_file()
+    public function test_it_can_put_file()
     {
         Storage::disk('upyun')->putFile('samples/test_img.jpg', __DIR__.'/assets/sample_img.jpg');
         $this->assertTrue(Storage::disk('upyun')->exists('samples/test_img.jpg'));
     }
 
     /**
-     * rename method test.
+     * getSize method test.
      */
-    public function test_it_can_rename_file()
+    public function test_it_can_get_size()
     {
-        Storage::disk('upyun')->rename('samples/test_img.jpg', 'samples/test2_img.jpg');
-        $this->assertTrue(Storage::disk('upyun')->exists('samples/test2_img.jpg'));
+        $size = Storage::disk('upyun')->getSize('samples/test_img.jpg');   
+        $this->assertEquals(182871, $size);
     }
+
+    /**
+     * update method test.
+     */
+    public function test_it_can_update_file()
+    {
+        Storage::disk('upyun')->update('samples/test_img.jpg', file_get_contents(__DIR__.'/assets/sample2_img.jpg'));
+        $this->assertTrue(Storage::disk('upyun')->exists('samples/test_img.jpg'));
+    }
+    
 }
